@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Conexão Pais e Filhos — Demo</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --primary: #4A90E2;
+    --success: #00C853;
+    --accent: #9b59b6;
+    --muted: #7f8c8d;
+    --text: #2c3e50;
+    --danger: #FF4081;
+    --warning: #FFC107;
+    --radius: 12px;
+    --shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box }
+  html, body { height: 100%; margin: 0; }
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg, var(--bg), #ffffff 60%);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 0;
+  }
+
+  /* App container */
+  .app {
+    max-width: 375px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* Header fixo, conteúdo, bottom nav */
+    min-height: 100vh;
+  }
+
+  /* Header fixo */
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+    z-index: 1000;
+    max-width: 375px;
+    margin: 0 auto;
+  }
+  .brand {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    box-shadow: var(--shadow);
+  }
+  h1 { font-size: 18px; margin: 0 }
+  .nav-actions { display: flex; gap: 8px; align-items: center }
+  button.icon {
+    background: transparent;
+    border: 0;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  .menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 16px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 8px 0;
+    min-width: 150px;
+  }
+  .menu-dropdown.active { display: block; }
+  .menu-dropdown .tab {
+    padding: 8px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .menu-dropdown .tab:hover { background: rgba(0,0,0,0.05); }
+
+  /* Main content with padding for fixed header */
+  .main-content {
+    padding-top: 80px; /* Altura do header + padding */
+    padding-bottom: 60px; /* Espaço para bottom nav */
+  }
+  .screen { background: transparent; padding: 16px; }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  /* Course list (Módulos) */
+  .course-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px }
+  .modules { display: grid; grid-template-columns: 1fr; gap: 12px }
+  .module {
+    padding: 12px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #fff, #fbfdff);
+    cursor: pointer;
+    border: 1px solid rgba(20,40,80,0.04);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .module.locked { opacity: 0.6; cursor: not-allowed; background: #f0f0f0; }
+  .module.locked::after {
+    content: "🔒 Módulo Bloqueado - Complete o anterior para desbloquear";
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    display: block;
+  }
+  .module-img { width: 80px; height: 60px; border-radius: 8px; background: #eee; object-fit: cover; }
+  .module h3 { margin: 0; font-size: 15px }
+  .module p { margin: 6px 0 0; font-size: 13px; color: var(--muted) }
+
+  /* Aulas dentro do módulo */
+  .aulas { display: grid; grid-template-columns: 1fr; gap: 12px }
+  .aula {
+    padding: 12px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #fff, #fbfdff);
+    cursor: pointer;
+    border: 1px solid rgba(20,40,80,0.04);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .aula.locked { opacity: 0.6; cursor: not-allowed; background: #f0f0f0; }
+  .aula-img { width: 80px; height: 60px; border-radius: 8px; background: #eee; object-fit: cover; }
+  .aula h3 { margin: 0; font-size: 15px }
+  .aula p { margin: 6px 0 0; font-size: 13px; color: var(--muted) }
+
+  /* Responsive adjustments */
+  @media (max-width: 700px) {
+    .modules { grid-template-columns: 1fr }
+    .aulas { grid-template-columns: 1fr }
+    body { padding: 0 }
+    h1 { font-size: 16px }
+    .main-content { padding-top: 70px; }
+  }
+
+  /* Player (para vídeos do YouTube) */
+  .player { display: flex; flex-direction: column; gap: 12px; }
+  .video-wrap {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  }
+  .video-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .player-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap }
+  .btn {
+    background: var(--primary);
+    color: white;
+    padding: 8px 16px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .btn.ghost {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid rgba(52,152,219,0.18);
+  }
+  .meta { font-size: 13px; color: var(--muted) }
+
+  /* Quiz */
+  .quiz { display: flex; flex-direction: column; gap: 12px; }
+  .question { font-weight: 700; font-size: 16px }
+  .options { display: flex; flex-direction: column; gap: 10px }
+  .option {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(44,62,80,0.06);
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .option.correct {
+    border-color: var(--success);
+    background: linear-gradient(90deg, rgba(0,200,83,0.06), #fff);
+  }
+  .option.wrong {
+    border-color: var(--danger);
+    background: linear-gradient(90deg, rgba(255,64,129,0.03), #fff);
+  }
+  .explain {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 10px;
+    border-radius: 8px;
+    background: #fbfdff;
+    border: 1px solid rgba(16,24,40,0.02);
+  }
+
+  /* Progress modal */
+  .final { text-align: center; padding: 22px; border-radius: 12px; }
+  .progress-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 999px;
+    margin: 10px auto 6px;
+    display: grid;
+    place-items: center;
+    background: conic-gradient(var(--primary) 0deg, var(--primary) 0deg, #e6f0fb 0deg);
+  }
+  .muted { color: var(--muted); font-size: 13px }
+
+  /* Sentiments list (Lista de Emoções) */
+  .sentiments-grid { display: grid; grid-template-columns: 1fr; gap: 10px }
+  .sentiment-card {
+    padding: 10px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #fff, #fcfbff);
+    border: 1px solid rgba(16,24,40,0.03);
+  }
+  .badge {
+    display: inline-block;
+    padding: 6px 8px;
+    border-radius: 999px;
+    background: rgba(155,89,182,0.08);
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 13px;
+  }
+
+  /* Benefits Section */
+  .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 10px }
+  .benefit-card {
+    padding: 10px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+  .benefit-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+  }
+  .positive .benefit-icon { background: rgba(0,200,83,0.1); color: var(--success); }
+  .negative .benefit-icon { background: rgba(255,64,129,0.1); color: var(--danger); }
+
+  /* Profile */
+  .profile-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .profile-avatar { width: 48px; height: 48px; border-radius: 999px; background: #eee; }
+  .profile-name { font-weight: 700; font-size: 16px; }
+  .profile-menu { display: flex; flex-direction: column; gap: 8px; }
+  .menu-item {
+    padding: 12px;
+    border-radius: 10px;
+    background: #fbfdff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(16,24,40,0.02);
+  }
+
+  /* Avatar Selection */
+  .avatar-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .avatar-option {
+    width: 100%;
+    height: 100px;
+    border-radius: 999px;
+    background: #eee;
+    cursor: pointer;
+    position: relative;
+  }
+  .avatar-option.selected::after {
+    content: "✔️";
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: var(--success);
+    color: white;
+    padding: 4px;
+    border-radius: 999px;
+  }
+
+  /* Sign Up */
+  .signup-form { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .signup-btn {
+    background: var(--primary);
+    color: white;
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .signup-or { text-align: center; color: var(--muted); font-size: 13px; }
+
+  /* Bottom nav (mobile) - Removido, agora no menu dropdown */
+</style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">CPF</div>
+        <div>
+          <h1>Conexão Pais e Filhos</h1>
+          <div class="muted" style="font-size:13px">Curso por Dr. Wimer Bottura Jr.</div>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <button class="icon" title="Menu" onclick="toggleMenu()">☰</button>
+        <div class="menu-dropdown" id="menu-dropdown">
+          <div class="tab" onclick="nav('home')">Início</div>
+          <div class="tab" onclick="nav('benefits')">Benefícios</div>
+          <div class="tab" onclick="nav('sentiments')">Emoções</div>
+          <div class="tab" onclick="nav('profile')">Perfil</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <!-- SCREEN: Sign Up -->
+      <main id="screen-signup" class="screen card" style="display:block;text-align:center;">
+        <h2 style="margin-top:0">Sign Up</h2>
+        <div class="signup-form">
+          <button class="signup-btn"><img src="https://via.placeholder.com/20?text=G" alt="Google"> Sign up with Google</button>
+          <button class="signup-btn"><img src="https://via.placeholder.com/20?text=F" alt="Facebook"> Sign up with Facebook</button>
+          <div class="signup-or">or Sign up with email</div>
+          <input type="email" placeholder="exemplo@email.com" style="width:100%;padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.1);">
+          <button class="btn" onclick="nav('home')">Continue</button>
+        </div>
+      </main>
+
+      <!-- SCREEN: Home / Módulos list -->
+      <main id="screen-home" class="screen card" style="display:none">
+        <div class="course-head">
+          <div>
+            <div class="muted">Módulos</div>
+            <h2 style="margin:4px 0 0">Fortalecendo Laços Familiares</h2>
+          </div>
+          <div class="meta">Versão demo • V1.0</div>
+        </div>
+        <p class="muted">Um curso único para fortalecer laços familiares, ministrado pelo Dr. Wimer Bottura Jr., psiquiatra e especialista em relacionamentos saudáveis com adolescentes. São 4 módulos, cada um com 8 aulas de até 8 minutos. Complete no seu próprio ritmo!</p>
+
+        <div class="modules" id="modules">
+          <!-- JS will populate modules -->
+        </div>
+      </main>
+
+      <!-- SCREEN: Aulas de um Módulo -->
+      <section id="screen-aulas" class="screen card" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div>
+            <div class="muted">Módulo</div>
+            <h2 id="module-title" style="margin:6px 0 0">Título do Módulo</h2>
+          </div>
+          <div style="text-align:right">
+            <div class="muted">Progresso</div>
+            <div id="module-progress" style="font-weight:700">0 / 8</div>
+          </div>
+        </div>
+
+        <div class="aulas" id="aulas-list">
+          <!-- JS will populate aulas -->
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn ghost" onclick="nav('home')">Voltar aos Módulos</button>
+        </div>
+      </section>
+
+      <!-- SCREEN: Aula (player + quiz) -->
+      <section id="screen-aula" class="screen card" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div>
+            <div class="muted">Aula</div>
+            <h2 id="aula-title" style="margin:6px 0 0">Título da Aula</h2>
+          </div>
+          <div style="text-align:right">
+            <div class="muted">Duração</div>
+            <div style="font-weight:700">Até 8 min</div>
+          </div>
+        </div>
+
+        <div class="player card" style="padding:12px">
+          <div class="video-wrap">
+            <iframe id="aula-video" width="100%" height="100%" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+
+          <div class="player-controls">
+            <button class="btn ghost" onclick="nav('aulas')">Voltar às Aulas</button>
+          </div>
+        </div>
+
+        <div id="quiz-area" class="card" style="margin-top:12px;padding:12px">
+          <!-- quiz will be injected here -->
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn ghost" onclick="nav('aulas')">Sair</button>
+          <button class="btn" onclick="nextQuiz()">Próximo</button>
+        </div>
+      </section>
+
+      <!-- SCREEN: Benefits -->
+      <section id="screen-benefits" class="screen card" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div>
+            <div class="muted">Benefícios</div>
+            <h2 style="margin:4px 0 0">Benefícios do Curso</h2>
+          </div>
+          <div class="badge">Resultados</div>
+        </div>
+
+        <div class="benefits-grid">
+          <div class="benefit-card positive"><div class="benefit-icon">❤️</div>Relações Mais Próximas</div>
+          <div class="benefit-card positive"><div class="benefit-icon">🤝</div>Menos Conflitos</div>
+          <div class="benefit-card positive"><div class="benefit-icon">👨‍👩‍👧</div>Habilidades Parentais Melhoradas</div>
+          <div class="benefit-card positive"><div class="benefit-icon">⏰</div>Mais Tempo de Qualidade</div>
+          <div class="benefit-card negative"><div class="benefit-icon">😠</div>Traços de Caráter Negativos</div>
+          <div class="benefit-card negative"><div class="benefit-icon">😭</div>Birras e Reclamações</div>
+        </div>
+      </section>
+
+      <!-- SCREEN: Sentiments / Lista de Emoções -->
+      <section id="screen-sentiments" class="screen card" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div>
+            <div class="muted">Lista de Emoções</div>
+            <h2 style="margin:4px 0 0">Por Que Nomear Emoções?</h2>
+          </div>
+          <div class="badge">Educação Emocional</div>
+        </div>
+
+        <div style="margin-bottom:10px">
+          <div class="muted">Instruções</div>
+          <p style="margin:6px 0">Nomear emoções ajuda a processar melhor. Escolha uma:</p>
+        </div>
+
+        <div class="sentiments-grid">
+          <div class="sentiment-card">
+            <strong>Emoções Positivas</strong>
+            <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted)">
+              <li>Permite ao cérebro lógico ajudar no processamento</li>
+              <li>Ajuda a responder melhor às emoções</li>
+              <li>Ajuda a entender o que estamos sentindo</li>
+              <li>Todas as acima</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN: Profile -->
+      <section id="screen-profile" class="screen card" style="display:none">
+        <div class="profile-header">
+          <div class="profile-avatar"><img src="https://via.placeholder.com/48" alt="Avatar"></div>
+          <div>
+            <div class="profile-name">Seu Nome</div>
+            <div class="muted">Progresso: 0 de 32 aulas</div>
+          </div>
+        </div>
+        <div class="profile-menu">
+          <div class="menu-item" onclick="nav('avatar')"><span>👤</span> Meu Avatar</div>
+          <div class="menu-item"><span>⚙️</span> Configurações de Perfil</div>
+          <div class="menu-item"><span>📝</span> Notas</div>
+          <div class="menu-item"><span>💡</span> Dicas</div>
+          <div class="menu-item"><span>🔖</span> Marcadores</div>
+          <div class="menu-item"><span>👨‍⚕️</span> Sobre o Dr. Wimer Bottura Jr.</div>
+        </div>
+        <p class="muted" style="margin-top:16px">Dr. Wimer Bottura Jr. é psiquiatra e psicoterapeuta especialista em famílias, infância e adolescência, focado em relacionamentos saudáveis.</p>
+      </section>
+
+      <!-- SCREEN: Avatar Selection -->
+      <section id="screen-avatar" class="screen card" style="display:none">
+        <h2 style="margin-top:0">Meu Avatar</h2>
+        <div class="avatar-grid">
+          <div class="avatar-option selected" style="background:ur[](https://via.placeholder.com/100?text=A1) center/cover;"></div>
+          <div class="avatar-option" style="background:ur[](https://via.placeholder.com/100?text=A2) center/cover;"></div>
+          <div class="avatar-option" style="background:ur[](https://via.placeholder.com/100?text=A3) center/cover;"></div>
+          <div class="avatar-option" style="background:ur[](https://via.placeholder.com/100?text=A4) center/cover;"></div>
+          <div class="avatar-option" style="background:ur[](https://via.placeholder.com/100?text=A5) center/cover;"></div>
+        </div>
+        <button class="btn" style="margin-top:16px;width:100%;" onclick="nav('profile')">Salvar</button>
+      </section>
+
+      <!-- SCREEN: Final (conclusão de aula ou módulo) -->
+      <section id="screen-final" class="screen card" style="display:none">
+        <div class="final">
+          <h2>Parabéns — Aula Concluída 🎉</h2>
+          <div id="final-msg" class="muted">Você completou a aula</div>
+          <div id="progress-wrap" style="margin-top:12px">
+            <div class="progress-circle" id="progress-circle"><div id="progress-num" style="font-weight:800">0%</div></div>
+            <div class="muted" style="margin-top:8px" id="progress-sub">Top 0%</div>
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn" onclick="nav('aulas')">Voltar às Aulas</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+<script>
+/* Demo app logic: single-file SPA behavior */
+
+/* --- sample data (adaptado ao curso) --- */
+const COURSE = {
+  title: "Conexão Pais e Filhos",
+  modules: [
+    { 
+      id: 0, 
+      title: "Módulo 1: Tranquilizando os Pais", 
+      description: "Acalmando preocupações comuns dos pais.", 
+      img: "https://via.placeholder.com/80x60?text=M1", 
+      locked: false, 
+      aulas: [
+        { id: 0, title: "Aula 1: Introdução às Preocupações", video: "https://www.youtube.com/embed/placeholder1", quizId: 0 },
+        { id: 1, title: "Aula 2: Gerenciando Ansiedade", video: "https://www.youtube.com/embed/placeholder2", quizId: 1 },
+        { id: 2, title: "Aula 3: Técnicas de Respiração", video: "https://www.youtube.com/embed/placeholder3", quizId: null },
+        { id: 3, title: "Aula 4: Comunicação com Parceiro", video: "https://www.youtube.com/embed/placeholder4", quizId: null },
+        { id: 4, title: "Aula 5: Reduzindo Estresse Diário", video: "https://www.youtube.com/embed/placeholder5", quizId: null },
+        { id: 5, title: "Aula 6: Autocuidado para Pais", video: "https://www.youtube.com/embed/placeholder6", quizId: null },
+        { id: 6, title: "Aula 7: Lidando com Medos", video: "https://www.youtube.com/embed/placeholder7", quizId: null },
+        { id: 7, title: "Aula 8: Revisão e Prática", video: "https://www.youtube.com/embed/placeholder8", quizId: null }
+      ]
+    },
+    { 
+      id: 1, 
+      title: "Módulo 2: Necessidades Essenciais das Crianças", 
+      description: "Entendendo o que as crianças realmente precisam.", 
+      img: "https://via.placeholder.com/80x60?text=M2", 
+      locked: true, 
+      aulas: [
+        { id: 0, title: "Aula 1: Necessidades Básicas", video: "https://www.youtube.com/embed/placeholder1", quizId: 2 },
+        { id: 1, title: "Aula 2: Amor e Limites", video: "https://www.youtube.com/embed/vehTS91mObM?si=v6R6mgSRd8yhodni", quizId: 3 },
+        { id: 2, title: "Aula 3: Segurança Emocional", video: "https://www.youtube.com/embed/placeholder3", quizId: null },
+        { id: 3, title: "Aula 4: Estimulação Cognitiva", video: "https://www.youtube.com/embed/placeholder4", quizId: null },
+        { id: 4, title: "Aula 5: Rotina e Estrutura", video: "https://www.youtube.com/embed/placeholder5", quizId: null },
+        { id: 5, title: "Aula 6: Nutrição e Saúde", video: "https://www.youtube.com/embed/placeholder6", quizId: null },
+        { id: 6, title: "Aula 7: Brincadeira e Desenvolvimento", video: "https://www.youtube.com/embed/placeholder7", quizId: null },
+        { id: 7, title: "Aula 8: Revisão das Necessidades", video: "https://www.youtube.com/embed/placeholder8", quizId: null }
+      ]
+    },
+    { 
+      id: 2, 
+      title: "Módulo 3: Quando as Coisas Acontecem Diferente do Esperado", 
+      description: "Lidando com imprevistos na parentalidade.", 
+      img: "https://via.placeholder.com/80x60?text=M3", 
+      locked: true, 
+      aulas: [
+        { id: 0, title: "Aula 1: Expectativas vs. Realidade", video: "https://www.youtube.com/embed/placeholder1", quizId: 4 },
+        { id: 1, title: "Aula 2: Adaptação a Mudanças", video: "https://www.youtube.com/embed/placeholder2", quizId: null },
+        { id: 2, title: "Aula 3: Conflitos Inesperados", video: "https://www.youtube.com/embed/placeholder3", quizId: null },
+        { id: 3, title: "Aula 4: Resiliência Familiar", video: "https://www.youtube.com/embed/placeholder4", quizId: null },
+        { id: 4, title: "Aula 5: Planejamento Flexível", video: "https://www.youtube.com/embed/placeholder5", quizId: null },
+        { id: 5, title: "Aula 6: Apoio em Crises", video: "https://www.youtube.com/embed/placeholder6", quizId: null },
+        { id: 6, title: "Aula 7: Reconstruindo Confiança", video: "https://www.youtube.com/embed/placeholder7", quizId: null },
+        { id: 7, title: "Aula 8: Reflexão e Aprendizado", video: "https://www.youtube.com/embed/placeholder8", quizId: null }
+      ]
+    },
+    { 
+      id: 3, 
+      title: "Módulo 4: Soluções e o 'Pulo do Gato'", 
+      description: "Dicas práticas e soluções inovadoras.", 
+      img: "https://via.placeholder.com/80x60?text=M4", 
+      locked: true, 
+      aulas: [
+        { id: 0, title: "Aula 1: Introdução às Soluções", video: "https://www.youtube.com/embed/placeholder1", quizId: 5 },
+        { id: 1, title: "Aula 2: Comunicação Aberta", video: "https://www.youtube.com/embed/placeholder2", quizId: null },
+        { id: 2, title: "Aula 3: Resolução de Conflitos", video: "https://www.youtube.com/embed/placeholder3", quizId: null },
+        { id: 3, title: "Aula 4: O 'Pulo do Gato'", video: "https://www.youtube.com/embed/placeholder4", quizId: null },
+        { id: 4, title: "Aula 5: Ferramentas Práticas", video: "https://www.youtube.com/embed/placeholder5", quizId: null },
+        { id: 5, title: "Aula 6: Manutenção de Laços", video: "https://www.youtube.com/embed/placeholder6", quizId: null },
+        { id: 6, title: "Aula 7: Avaliação de Progresso", video: "https://www.youtube.com/embed/placeholder7", quizId: null },
+        { id: 7, title: "Aula 8: Conclusão e Próximos Passos", video: "https://www.youtube.com/embed/placeholder8", quizId: null }
+      ]
+    }
+  ],
+  quizzes: [
+    { q: "Por que é importante tranquilizar os pais?", opts: ["Reduz ansiedade", "Melhora comunicação", "Ambos", "Nenhum"], a: 2, explain: "Tranquilizar reduz ansiedade e melhora laços." },
+    { q: "Como gerenciar a ansiedade dos pais?", opts: ["Ignorar", "Técnicas de respiração", "Aumentar estresse", "Nenhum"], a: 1, explain: "Respiração ajuda a acalmar o sistema nervoso." },
+    { q: "Quais são necessidades essenciais das crianças?", opts: ["Amor e limites", "Apenas diversão", "Isolamento", "Nenhum"], a: 0, explain: "Amor, segurança e limites são chave." },
+    { q: "O que 'Amor e Limites' significa?", opts: ["Regras sem afeto", "Afeto com estrutura", "Isolamento", "Nenhum"], a: 1, explain: "Equilíbrio entre amor e disciplina é essencial." },
+    { q: "O que fazer quando as coisas saem do esperado?", opts: ["Ignorar", "Adaptar e aprender", "Desistir", "Nenhum"], a: 1, explain: "Adaptação promove resiliência." },
+    { q: "Qual é o 'pulo do gato' em soluções?", opts: ["Comunicação aberta", "Punições", "Ignorar problemas", "Nenhum"], a: 0, explain: "Comunicação é essencial para soluções." }
+  ]
+};
+
+/* app state */
+let state = {
+  currentScreen: 'signup', // Começa no sign up
+  currentModuleIndex: 0,
+  currentAulaIndex: 0,
+  quizIndex: 0,
+  correctCount: 0,
+  totalQuiz: 1, // Por aula, exemplo
+  unlockedModules: [0], // Módulos desbloqueados inicialmente
+  menuOpen: false
+};
+
+/* init */
+function init() {
+  renderModules();
+  setTabActive('home');
+  document.addEventListener('click', closeMenuOnOutsideClick);
+}
+init();
+
+/* render modules list */
+function renderModules() {
+  const cont = document.getElementById('modules');
+  cont.innerHTML = '';
+  COURSE.modules.forEach((m, i) => {
+    const el = document.createElement('div');
+    el.className = 'module' + (m.locked && !state.unlockedModules.includes(i) ? ' locked' : '');
+    el.innerHTML = `<img class="module-img" src="${m.img}" alt="${m.title}"><div><h3>${m.title}</h3><p>${m.description}</p><div style="margin-top:8px;font-size:13px;color:var(--muted)">8 aulas • Até 8 min cada</div></div>`;
+    if (!m.locked || state.unlockedModules.includes(i)) el.onclick = () => startModule(i);
+    cont.appendChild(el);
+  });
+}
+
+/* Start a module (show aulas) */
+function startModule(index) {
+  if (COURSE.modules[index].locked && !state.unlockedModules.includes(index)) return toast('Módulo bloqueado!');
+  state.currentModuleIndex = index;
+  document.getElementById('module-title').textContent = COURSE.modules[index].title;
+  document.getElementById('module-progress').textContent = `0 / 8`; // Placeholder, pode rastrear progresso
+  renderAulas(index);
+  nav('aulas');
+  // Unlock next module
+  if (index + 1 < COURSE.modules.length) state.unlockedModules.push(index + 1);
+  renderModules();
+}
+
+/* Render aulas of module */
+function renderAulas(moduleIndex) {
+  const cont = document.getElementById('aulas-list');
+  cont.innerHTML = '';
+  COURSE.modules[moduleIndex].aulas.forEach((a, i) => {
+    const el = document.createElement('div');
+    el.className = 'aula';
+    el.innerHTML = `<img class="aula-img" src="https://via.placeholder.com/80x60?text=A${i+1}" alt="${a.title}"><div><h3>${a.title}</h3><p>Aula de até 8 minutos.</p></div>`;
+    el.onclick = () => startAula(moduleIndex, i);
+    cont.appendChild(el);
+  });
+}
+
+/* Start an aula */
+function startAula(moduleIndex, aulaIndex) {
+  state.currentAulaIndex = aulaIndex;
+  state.quizIndex = 0;
+  state.correctCount = 0;
+  const aula = COURSE.modules[moduleIndex].aulas[aulaIndex];
+  document.getElementById('aula-title').textContent = aula.title;
+  document.getElementById('aula-video').src = aula.video;
+  state.totalQuiz = aula.quizId !== null ? 1 : 0; // Um quiz por aula com quiz
+  loadQuiz(aula.quizId);
+  nav('aula');
+}
+
+/* navigation */
+function nav(screen) {
+  // hide all screens
+  ['signup', 'home', 'aulas', 'aula', 'benefits', 'sentiments', 'profile', 'avatar', 'final'].forEach(s => {
+    const el = document.getElementById('screen-' + s);
+    if (el) el.style.display = 'none';
+  });
+  // show chosen
+  document.getElementById('screen-' + screen).style.display = 'block';
+
+  state.currentScreen = screen;
+  setTabActive(screen);
+  closeMenu();
+}
+
+/* Set active tab for visual feedback (if needed in dropdown) */
+function setTabActive(screen) {
+  const tabs = document.querySelectorAll('.menu-dropdown .tab');
+  tabs.forEach(tab => tab.classList.remove('active'));
+  const activeTab = document.querySelector(`.menu-dropdown .tab[onclick*="nav('${screen}')"]`);
+  if (activeTab) activeTab.classList.add('active');
+}
+
+/* Toggle menu dropdown */
+function toggleMenu() {
+  const menu = document.getElementById('menu-dropdown');
+  state.menuOpen = !state.menuOpen;
+  menu.classList.toggle('active', state.menuOpen);
+}
+
+/* Close menu if clicked outside */
+function closeMenuOnOutsideClick(event) {
+  const menu = document.getElementById('menu-dropdown');
+  const button = document.querySelector('.nav-actions .icon');
+  if (!menu.contains(event.target) && !button.contains(event.target)) {
+    closeMenu();
+  }
+}
+
+function closeMenu() {
+  const menu = document.getElementById('menu-dropdown');
+  if (state.menuOpen) {
+    menu.classList.remove('active');
+    state.menuOpen = false;
+  }
+}
+
+/* Quiz rendering (adaptado por aula) */
+function loadQuiz(quizId) {
+  const area = document.getElementById('quiz-area');
+  if (quizId === null) {
+    area.innerHTML = `<div class="muted">Nenhum quiz para esta aula. Clique em Próximo para concluir.</div>`;
+    return;
+  }
+  const q = COURSE.quizzes[quizId];
+  // build markup
+  let html = `<div class="quiz"><div class="question">${q.q}</div><div class="options">`;
+  q.opts.forEach((opt, i) => {
+    html += `<div class="option" data-opt="${i}"><span>${opt}</span><strong style="opacity:0" class="icon">✓</strong></div>`;
+  });
+  html += `</div><div id="explain" style="display:none" class="explain"></div></div>`;
+  area.innerHTML = html;
+
+  // add listeners
+  const opts = area.querySelectorAll('.option');
+  opts.forEach(o => {
+    o.addEventListener('click', () => {
+      const chosen = parseInt(o.getAttribute('data-opt'));
+      handleAnswer(q, chosen, o, opts);
+    });
+  });
+}
+
+/* Answer handling */
+function handleAnswer(q, chosen, selectedEl, allOptions) {
+  allOptions.forEach(x => x.style.pointerEvents = 'none');
+  const correct = q.a;
+  const explainEl = document.getElementById('explain');
+  if (chosen === correct) {
+    selectedEl.classList.add('correct');
+    selectedEl.querySelector('.icon').style.opacity = 1;
+    selectedEl.querySelector('.icon').textContent = '✔️';
+    state.correctCount++;
+    explainEl.innerHTML = `<strong>Certo!</strong> ${q.explain}`;
+  } else {
+    selectedEl.classList.add('wrong');
+    selectedEl.querySelector('.icon').style.opacity = 1;
+    selectedEl.querySelector('.icon').textContent = '✖';
+    allOptions.forEach(opt => {
+      if (parseInt(opt.getAttribute('data-opt')) === correct) {
+        opt.classList.add('correct');
+        opt.querySelector('.icon').style.opacity = 1;
+        opt.querySelector('.icon').textContent = '✔️';
+      }
+    });
+    explainEl.innerHTML = `<strong>Resposta certa:</strong> ${q.opts[correct]}. <br>${q.explain}`;
+  }
+  explainEl.style.display = 'block';
+}
+
+/* Next quiz / finish (para aula) */
+function nextQuiz() {
+  if (state.totalQuiz === 0) {
+    finishAula();
+    return;
+  }
+  state.quizIndex++;
+  if (state.quizIndex >= state.totalQuiz) {
+    finishAula();
+  } else {
+    loadQuiz(); // Se mais quizzes
+  }
+}
+
+/* Finish aula */
+function finishAula() {
+  const percent = Math.round((state.correctCount / (state.totalQuiz || 1)) * 100);
+  document.getElementById('progress-num').textContent = percent + '%';
+  const deg = Math.round((percent / 100) * 360);
+  document.getElementById('progress-circle').style.background = `conic-gradient(var(--primary) 0deg ${deg}deg, #e6f0fb ${deg}deg 360deg)`;
+  let percentile = 50 + Math.round(percent / 2);
+  percentile = Math.min(98, percentile);
+  document.getElementById('progress-sub').textContent = `Top ${percentile}% dos participantes`;
+  document.getElementById('final-msg').textContent = `Você acertou ${state.correctCount} de ${state.totalQuiz}`;
+  nav('final');
+}
+
+/* small toast (demo) */
+function toast(txt) {
+  alert(txt);
+}
+</script>
+</body>
+</html>
