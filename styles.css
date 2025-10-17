@@ -1,431 +1,637 @@
-// script.js
+/* styles.css */
 
-/* Demo app logic: single-file SPA behavior */
-
-/* --- sample data (adaptado ao curso) --- */
-const COURSE = {
-  title: "Conexão Pais e Filhos",
-  modules: [
-    { 
-      id: 0, 
-      title: "Módulo 1: Tranquilizando os Pais", 
-      description: "Acalmando preocupações comuns dos pais.", 
-      img: "data:image/webp;base64,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", 
-      locked: false,
-      aulas: [
-        { id: 0, title: "Aula 1: Introdução às Preocupações", video: "https://www.youtube.com/embed/hB1UNt93FN8?si=xtIJrg4rh3mC1Oxm", quizId: 0 },
-        { id: 1, title: "Aula 2: Gerenciando Ansiedade", video: "https://www.youtube.com/embed/hB1UNt93FN8?si=xtIJrg4rh3mC1Oxm", quizId: 1 },
-        { id: 2, title: "Aula 3: Técnicas de Respiração", video: "https://www.youtube.com/embed/hB1UNt93FN8?si=xtIJrg4rh3mC1Oxm", quizId: null },
-        { id: 3, title: "Aula 4: Comunicação com Parceiro", video: "https://www.youtube.com/embed/placeholder4", quizId: null },
-        { id: 4, title: "Aula 5: Reduzindo Estresse Diário", video: "https://www.youtube.com/embed/placeholder5", quizId: null },
-        { id: 5, title: "Aula 6: Autocuidado para Pais", video: "https://www.youtube.com/embed/placeholder6", quizId: null },
-        { id: 6, title: "Aula 7: Lidando com Medos", video: "https://www.youtube.com/embed/placeholder7", quizId: null },
-        { id: 7, title: "Aula 8: Revisão e Prática", video: "https://www.youtube.com/embed/placeholder8", quizId: null }
-      ]
-    },
-    { 
-      id: 1, 
-      title: "Módulo 2: Necessidades Essenciais das Crianças", 
-      description: "Entendendo o que as crianças realmente precisam.", 
-      img: "https://tse4.mm.bing.net/th/id/OIP.BpCJKOjnlx-_HRofn2QFxAHaEK?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3", 
-      locked: true, 
-      aulas: [
-        { id: 0, title: "Aula 1: Necessidades Básicas", video: "https://www.youtube.com/embed/placeholder1", quizId: 2 },
-        { id: 1, title: "Aula 2: Amor e Limites", video: "https://www.youtube.com/embed/vehTS91mObM?si=v6R6mgSRd8yhodni", quizId: 3 },
-        { id: 2, title: "Aula 3: Segurança Emocional", video: "https://www.youtube.com/embed/placeholder3", quizId: null },
-        { id: 3, title: "Aula 4: Estimulação Cognitiva", video: "https://www.youtube.com/embed/placeholder4", quizId: null },
-        { id: 4, title: "Aula 5: Rotina e Estrutura", video: "https://www.youtube.com/embed/placeholder5", quizId: null },
-        { id: 5, title: "Aula 6: Nutrição e Saúde", video: "https://www.youtube.com/embed/placeholder6", quizId: null },
-        { id: 6, title: "Aula 7: Brincadeira e Desenvolvimento", video: "https://www.youtube.com/embed/placeholder7", quizId: null },
-        { id: 7, title: "Aula 8: Revisão das Necessidades", video: "https://www.youtube.com/embed/placeholder8", quizId: null }
-      ]
-    },
-    { 
-      id: 2, 
-      title: "Módulo 3: Quando as Coisas Acontecem Diferente do Esperado", 
-      description: "Lidando com imprevistos na parentalidade.", 
-      img: "https://tse3.mm.bing.net/th/id/OIP.hmheZT9EI0QhpXTHMk4cHgHaE8?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3", 
-      locked: true, 
-      aulas: [
-        { id: 0, title: "Aula 1: Expectativas vs. Realidade", video: "https://www.youtube.com/embed/placeholder1", quizId: 4 },
-        { id: 1, title: "Aula 2: Adaptação a Mudanças", video: "https://www.youtube.com/embed/placeholder2", quizId: null },
-        { id: 2, title: "Aula 3: Conflitos Inesperados", video: "https://www.youtube.com/embed/placeholder3", quizId: null },
-        { id: 3, title: "Aula 4: Resiliência Familiar", video: "https://www.youtube.com/embed/placeholder4", quizId: null },
-        { id: 4, title: "Aula 5: Planejamento Flexível", video: "https://www.youtube.com/embed/placeholder5", quizId: null },
-        { id: 5, title: "Aula 6: Apoio em Crises", video: "https://www.youtube.com/embed/placeholder6", quizId: null },
-        { id: 6, title: "Aula 7: Reconstruindo Confiança", video: "https://www.youtube.com/embed/placeholder7", quizId: null },
-        { id: 7, title: "Aula 8: Reflexão e Aprendizado", video: "https://www.youtube.com/embed/placeholder8", quizId: null }
-      ]
-    },
-    { 
-      id: 3, 
-      title: "Módulo 4: Soluções e o 'Pulo do Gato'", 
-      description: "Dicas práticas e soluções inovadoras.", 
-      img: "https://tse4.mm.bing.net/th/id/OIP.HQ3ujTd7WTyzECAHOTVfIgHaEK?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3", 
-      locked: true, 
-      aulas: [
-        { id: 0, title: "Aula 1: Introdução às Soluções", video: "https://www.youtube.com/embed/placeholder1", quizId: 5 },
-        { id: 1, title: "Aula 2: Comunicação Aberta", video: "https://www.youtube.com/embed/placeholder2", quizId: null },
-        { id: 2, title: "Aula 3: Resolução de Conflitos", video: "https://www.youtube.com/embed/placeholder3", quizId: null },
-        { id: 3, title: "Aula 4: O 'Pulo do Gato'", video: "https://www.youtube.com/embed/placeholder4", quizId: null },
-        { id: 4, title: "Aula 5: Ferramentas Práticas", video: "https://www.youtube.com/embed/placeholder5", quizId: null },
-        { id: 5, title: "Aula 6: Manutenção de Laços", video: "https://www.youtube.com/embed/placeholder6", quizId: null },
-        { id: 6, title: "Aula 7: Avaliação de Progresso", video: "https://www.youtube.com/embed/placeholder7", quizId: null },
-        { id: 7, title: "Aula 8: Conclusão e Próximos Passos", video: "https://www.youtube.com/embed/placeholder8", quizId: null }
-      ]
-    }
-  ],
-  quizzes: [
-    { q: "Por que é importante tranquilizar os pais?", opts: ["Reduz ansiedade", "Melhora comunicação", "Ambos", "Nenhum"], a: 2, explain: "Tranquilizar reduz ansiedade e melhora laços." },
-    { q: "Como gerenciar a ansiedade dos pais?", opts: ["Ignorar", "Técnicas de respiração", "Aumentar estresse", "Nenhum"], a: 1, explain: "Respiração ajuda a acalmar o sistema nervoso." },
-    { q: "Quais são necessidades essenciais das crianças?", opts: ["Amor e limites", "Apenas diversão", "Isolamento", "Nenhum"], a: 0, explain: "Amor, segurança e limites são chave." },
-    { q: "O que 'Amor e Limites' significa?", opts: ["Regras sem afeto", "Afeto com estrutura", "Isolamento", "Nenhum"], a: 1, explain: "Equilíbrio entre amor e discipline é essencial." },
-    { q: "O que fazer quando as coisas saem do esperado?", opts: ["Ignorar", "Adaptar e aprender", "Desistir", "Nenhum"], a: 1, explain: "Adaptação promove resiliência." },
-    { q: "Qual é o 'pulo do gato' em soluções?", opts: ["Comunicação aberta", "Punições", "Ignorar problemas", "Nenhum"], a: 0, explain: "Comunicação é essencial para soluções." }
-  ]
-};
-
-/* app state */
-let state = {
-  currentScreen: 'signup', // Começa no sign up
-  currentModuleIndex: 0,
-  currentAulaIndex: 0,
-  quizIndex: 0,
-  correctCount: 0,
-  totalQuiz: 1, // Por aula, exemplo
-  unlockedModules: [0], // Módulos desbloqueados inicialmente
-  menuOpen: false,
-  bookmarks: JSON.parse(localStorage.getItem('bookmarks')) || [],
-  notes: localStorage.getItem('notes') || '',
-  avatar: localStorage.getItem('avatar') || 'https://via.placeholder.com/48',
-  darkMode: JSON.parse(localStorage.getItem('darkMode')) || false,
-  tips: localStorage.getItem('tips') || ''
-};
-
-/* init */
-function init() {
-  renderModules();
-  setTabActive('home');
-  document.addEventListener('click', closeMenuOnOutsideClick);
-  loadNotes();
-  loadBookmarks();
-  loadAvatar();
-  toggleDarkMode(state.darkMode);
-  loadTips();
-}
-init();
-
-/* render modules list */
-function renderModules() {
-  const cont = document.getElementById('modules');
-  cont.innerHTML = '';
-  COURSE.modules.forEach((m, i) => {
-    const el = document.createElement('div');
-    el.className = 'module' + (m.locked && !state.unlockedModules.includes(i) ? ' locked' : '');
-    el.innerHTML = `<img class="module-img" src="${m.img}" alt="${m.title}"><div><h3>${m.title}</h3><p>${m.description}</p><div style="margin-top:8px;font-size:13px;color:var(--muted)">8 aulas • Até 8 min cada</div></div>`;
-    if (!m.locked || state.unlockedModules.includes(i)) el.onclick = () => startModule(i);
-    cont.appendChild(el);
-  });
+/* Variáveis */
+:root {
+  --bg: #f6f8fb;
+  --card: #ffffff;
+  --primary: #4A90E2; /* Azul principal */
+  --success: #00C853; /* Verde para sucesso/concluído */
+  --accent: #9b59b6; /* Roxo de destaque */
+  --muted: #7f8c8d; /* Texto secundário */
+  --text: #2c3e50; /* Texto principal */
+  --danger: #FF4081; /* Rosa/Vermelho para erro */
+  --warning: #FFC107; /* Amarelo para atenção */
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.05);
+  
+  /* Dark Mode Variables */
+  --dark-bg: #121212;
+  --dark-card: #1e1e1e;
+  --dark-text: #e0e0e0;
+  --dark-muted: #9e9e9e;
 }
 
-/* Start a module (show aulas) */
-function startModule(index) {
-  if (COURSE.modules[index].locked && !state.unlockedModules.includes(index)) return toast('Módulo bloqueado!');
-  state.currentModuleIndex = index;
-  document.getElementById('module-title').textContent = COURSE.modules[index].title;
-  document.getElementById('module-progress').textContent = `0 / 8`; // Placeholder, pode rastrear progresso
-  renderAulas(index);
-  nav('aulas');
-  // Unlock next module
-  if (index + 1 < COURSE.modules.length) state.unlockedModules.push(index + 1);
-  renderModules();
+/* Dark Mode */
+.dark-mode {
+  --bg: var(--dark-bg);
+  --card: var(--dark-card);
+  --text: var(--dark-text);
+  --muted: var(--dark-muted);
+  background: linear-gradient(180deg, var(--bg), #000000 60%);
 }
 
-/* Render aulas of module */
-function renderAulas(moduleIndex) {
-  const cont = document.getElementById('aulas-list');
-  cont.innerHTML = '';
-  COURSE.modules[moduleIndex].aulas.forEach((a, i) => {
-    const el = document.createElement('div');
-    el.className = 'aula';
-    el.innerHTML = `<img class="aula-img" src="https://via.placeholder.com/80x60?text=A${i+1}" alt="${a.title}"><div><h3>${a.title}</h3><p>Aula de até 8 minutos.</p></div><button class="btn ghost" onclick="addBookmark(${moduleIndex}, ${i})">Marcar</button>`;
-    el.onclick = () => startAula(moduleIndex, i);
-    cont.appendChild(el);
-  });
+/* Dark Mode Specific Overrides */
+.dark-mode .module, 
+.dark-mode .aula,
+.dark-mode .sentiment-card,
+.dark-mode .option,
+.dark-mode .menu-item {
+  background: var(--dark-card);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Start an aula */
-function startAula(moduleIndex, aulaIndex) {
-  state.currentAulaIndex = aulaIndex;
-  state.quizIndex = 0;
-  state.correctCount = 0;
-  const aula = COURSE.modules[moduleIndex].aulas[aulaIndex];
-  document.getElementById('aula-title').textContent = aula.title;
-  document.getElementById('aula-video').src = aula.video;
-  state.totalQuiz = aula.quizId !== null ? 1 : 0; // Um quiz por aula com quiz
-  loadQuiz(aula.quizId);
-  nav('aula');
+.dark-mode .module.locked,
+.dark-mode .aula.locked {
+  background: #252525;
+  opacity: 0.8;
 }
 
-/* navigation */
-function nav(screen) {
-  // hide all screens
-  ['signup', 'home', 'aulas', 'aula', 'benefits', 'sentiments', 'profile', 'avatar', 'notes', 'tips', 'bookmarks', 'bio', 'final'].forEach(s => {
-    const el = document.getElementById('screen-' + s);
-    if (el) el.style.display = 'none';
-  });
-  // show chosen
-  document.getElementById('screen-' + screen).style.display = 'block';
-
-  state.currentScreen = screen;
-  setTabActive(screen);
-  closeMenu();
+.dark-mode .explain {
+  background: #252525;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Set active tab for visual feedback (if needed in dropdown) */
-function setTabActive(screen) {
-  const tabs = document.querySelectorAll('.menu-dropdown .tab');
-  tabs.forEach(tab => tab.classList.remove('active'));
-  const activeTab = document.querySelector(`.menu-dropdown .tab[onclick*="nav('${screen}')"]`);
-  if (activeTab) activeTab.classList.add('active');
+.dark-mode .module-img,
+.dark-mode .aula-img,
+.dark-mode .avatar-option {
+  background: #333;
 }
 
-/* Toggle menu dropdown */
-function toggleMenu() {
-  const menu = document.getElementById('menu-dropdown');
-  state.menuOpen = !state.menuOpen;
-  menu.classList.toggle('active', state.menuOpen);
+.dark-mode .option.correct {
+  background: linear-gradient(90deg, rgba(0, 200, 83, 0.2), var(--dark-card));
+  border-color: var(--success);
 }
 
-/* Close menu if clicked outside */
-function closeMenuOnOutsideClick(event) {
-  const menu = document.getElementById('menu-dropdown');
-  const button = document.querySelector('.nav-actions .icon');
-  if (!menu.contains(event.target) && !button.contains(event.target)) {
-    closeMenu();
-  }
+.dark-mode .option.wrong {
+  background: linear-gradient(90deg, rgba(255, 64, 129, 0.2), var(--dark-card));
+  border-color: var(--danger);
 }
 
-function closeMenu() {
-  const menu = document.getElementById('menu-dropdown');
-  if (state.menuOpen) {
-    menu.classList.remove('active');
-    state.menuOpen = false;
-  }
+.dark-mode .btn.ghost {
+  color: var(--dark-text);
 }
 
-/* Quiz rendering (adaptado por aula) */
-function loadQuiz(quizId) {
-  const area = document.getElementById('quiz-area');
-  if (quizId === null) {
-    area.innerHTML = `<div class="muted">Nenhum quiz para esta aula. Clique em Próximo para concluir.</div>`;
-    return;
-  }
-  const q = COURSE.quizzes[quizId];
-  // build markup
-  let html = `<div class="quiz"><div class="question">${q.q}</div><div class="options">`;
-  q.opts.forEach((opt, i) => {
-    html += `<div class="option" data-opt="${i}"><span>${opt}</span><strong style="opacity:0" class="icon">✓</strong></div>`;
-  });
-  html += `</div><div id="explain" style="display:none" class="explain"></div></div>`;
-  area.innerHTML = html;
-
-  // add listeners
-  const opts = area.querySelectorAll('.option');
-  opts.forEach(o => {
-    o.addEventListener('click', () => {
-      const chosen = parseInt(o.getAttribute('data-opt'));
-      handleAnswer(q, chosen, o, opts);
-    });
-  });
+/* Estilos gerais */
+* { box-sizing: border-box }
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  padding: 0; 
+}
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, var(--bg), #ffffff 60%);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  padding: 20px;
 }
 
-/* Answer handling */
-function handleAnswer(q, chosen, selectedEl, allOptions) {
-  allOptions.forEach(x => x.style.pointerEvents = 'none');
-  const correct = q.a;
-  const explainEl = document.getElementById('explain');
-  if (chosen === correct) {
-    selectedEl.classList.add('correct');
-    selectedEl.querySelector('.icon').style.opacity = 1;
-    selectedEl.querySelector('.icon').textContent = '✔️';
-    state.correctCount++;
-    explainEl.innerHTML = `<strong>Certo!</strong> ${q.explain}`;
-  } else {
-    selectedEl.classList.add('wrong');
-    selectedEl.querySelector('.icon').style.opacity = 1;
-    selectedEl.querySelector('.icon').textContent = '✖';
-    allOptions.forEach(opt => {
-      if (parseInt(opt.getAttribute('data-opt')) === correct) {
-        opt.classList.add('correct');
-        opt.querySelector('.icon').style.opacity = 1;
-        opt.querySelector('.icon').textContent = '✔️';
-      }
-    });
-    explainEl.innerHTML = `<strong>Resposta certa:</strong> ${q.opts[correct]}. <br>${q.explain}`;
-  }
-  explainEl.style.display = 'block';
+/* App container (Simulando um celular) */
+.app {
+  width: 390px;
+  height: 844px;
+  border-radius: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  background: var(--card);
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* Header, Content, Footer */
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 40px);
 }
 
-/* Next quiz / finish (para aula) */
-function nextQuiz() {
-  if (state.totalQuiz === 0) {
-    finishAula();
-    return;
-  }
-  state.quizIndex++;
-  if (state.quizIndex >= state.totalQuiz) {
-    finishAula();
-  } else {
-    loadQuiz(); // Se mais quizzes
-  }
+/* Header */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  width: 100%;
 }
 
-/* Finish aula */
-function finishAula() {
-  const percent = Math.round((state.correctCount / (state.totalQuiz || 1)) * 100);
-  document.getElementById('progress-num').textContent = percent + '%';
-  const deg = Math.round((percent / 100) * 360);
-  document.getElementById('progress-circle').style.background = `conic-gradient(var(--primary) 0deg ${deg}deg, #e6f0fb ${deg}deg 360deg)`;
-  let percentile = 50 + Math.round(percent / 2);
-  percentile = Math.min(98, percentile);
-  document.getElementById('progress-sub').textContent = `Top ${percentile}% dos participantes`;
-  document.getElementById('final-msg').textContent = `Você acertou ${state.correctCount} de ${state.totalQuiz}`;
-  nav('final');
+.brand { display: flex; gap: 12px; align-items: center; }
+.logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+.logo:hover { transform: scale(1.05); }
+h1 { font-size: 18px; margin: 0; }
+.nav-actions { display: flex; gap: 8px; align-items: center; position: relative; }
+button.icon {
+  background: transparent;
+  border: 0;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--text);
+}
+.menu-dropdown {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 8px 0;
+  min-width: 150px;
+  z-index: 1001;
+}
+.menu-dropdown.active { display: block; animation: slideDown 0.3s ease; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.menu-dropdown .tab {
+  padding: 8px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.menu-dropdown .tab:hover { background: rgba(0,0,0,0.05); }
+
+/* Main content & Screens */
+.main-content {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  overflow-y: auto;
+}
+.screen { 
+  background: transparent;
+  min-height: 100%;
+}
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
 }
 
-/* small toast (demo) */
-function toast(txt) {
-  alert(txt);
+/* Typography & Helpers */
+.muted { color: var(--muted); font-size: 14px; }
+h2 { margin: 8px 0; font-size: 20px; }
+h3 { margin: 0; font-size: 16px; }
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: var(--primary);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+.btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn:hover { background: #3a81d8; }
+.btn.ghost {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+.btn.ghost:hover { background: rgba(74, 144, 226, 0.1); }
+.btn-disabled {
+    background: #ccc;
+    color: #888;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: not-allowed;
 }
 
-/* Funções adicionais */
+/* Sign Up Screen */
+.signup-form { display: grid; gap: 8px; margin-top: 12px; }
+.signup-btn {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 12px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.signup-btn img { border-radius: 50%; }
+.signup-or { text-align: center; color: var(--muted); margin: 10px 0; font-size: 13px; }
 
-/* Toggle Dark Mode */
-function toggleDarkMode() {
-  state.darkMode = !state.darkMode;
-  document.body.classList.toggle('dark-mode', state.darkMode);
-  document.getElementById('mode-icon').textContent = state.darkMode ? '☀️' : '🌙';
-  document.getElementById('mode-text').textContent = state.darkMode ? 'Modo Light' : 'Modo Dark';
-  localStorage.setItem('darkMode', JSON.stringify(state.darkMode));
+/* Course list (Módulos) */
+.course-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+.modules { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.module {
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff, #fbfdff);
+  cursor: pointer;
+  border: 1px solid rgba(20,40,80,0.04);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+.module:hover:not(.locked) { box-shadow: 0 4px 10px rgba(74, 144, 226, 0.1); transform: translateY(-2px); }
+.module.locked { opacity: 0.6; cursor: not-allowed; background: #f0f0f0; }
+.module-img { width: 80px; height: 60px; border-radius: 8px; background: #eee; object-fit: cover; }
+.module h3 { margin: 0; font-size: 15px; }
+.module p { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
+.module-info { flex: 1; }
+.module-status { font-size: 20px; }
+.module-progress progress {
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: 4px;
+}
+.module-progress progress::-webkit-progress-bar { background-color: #eee; border-radius: 5px; }
+.module-progress progress::-webkit-progress-value { background-color: var(--primary); border-radius: 5px; }
+.module-progress .progress-text { font-size: 12px; color: var(--muted); margin-top: 4px; display: block; }
+
+/* Aulas dentro do módulo */
+.aulas { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.aula {
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff, #fbfdff);
+  cursor: pointer;
+  border: 1px solid rgba(20,40,80,0.04);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+.aula:hover:not(.locked) { box-shadow: 0 4px 10px rgba(74, 144, 226, 0.1); transform: translateY(-2px); }
+.aula.locked { opacity: 0.6; cursor: not-allowed; background: #f0f0f0; }
+.aula.completed { border-left: 5px solid var(--success); }
+.aula-img-wrap { width: 80px; height: 60px; position: relative; }
+.aula-img { width: 100%; height: 100%; border-radius: 8px; background: #eee; object-fit: cover; }
+.aula h3 { margin: 0; font-size: 15px; }
+.aula p { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
+.aula-info { flex: 1; }
+.aula-status { font-size: 20px; color: var(--primary); }
+.aula.completed .aula-status { color: var(--success); }
+
+/* Player (para vídeos do YouTube) */
+.player { display: flex; flex-direction: column; gap: 12px; }
+.video-wrap { 
+  position: relative; 
+  border-radius: 12px; 
+  overflow: hidden; 
+  background: #000; 
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+}
+.video-wrap iframe { 
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+}
+.player-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* Quiz Styles */
+.options-grid {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+.option {
+  padding: 12px;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+.option:hover { background: rgba(74, 144, 226, 0.05); border-color: var(--primary); }
+.option.correct {
+  background: linear-gradient(90deg, rgba(0, 200, 83, 0.1), var(--card));
+  border-color: var(--success);
+  color: var(--success);
+  font-weight: 700;
+}
+.option.wrong {
+  background: linear-gradient(90deg, rgba(255, 64, 129, 0.1), var(--card));
+  border-color: var(--danger);
+  color: var(--danger);
+  font-weight: 700;
+}
+.explain {
+    padding: 12px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: #f8f8f8;
+    color: var(--text);
 }
 
-/* Update Avatar */
-function updateAvatar(input) {
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      state.avatar = e.target.result;
-      localStorage.setItem('avatar', state.avatar);
-      document.getElementById('avatar-img').src = state.avatar;
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
+/* Benefits Screen */
+.benefits-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.benefit-card {
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  border-left: 5px solid;
+}
+.benefit-card.positive { border-color: var(--success); background: #e6f9ed; }
+.benefit-card.neutral { border-color: var(--muted); background: #f0f3f5; }
+.benefit-card.primary { border-color: var(--primary); background: #e0f0ff; }
+.benefit-card.danger { border-color: var(--danger); background: #fff0f3; }
+.benefit-icon { font-size: 24px; margin-bottom: 8px; }
+.benefit-card h3 { margin: 0 0 4px; font-size: 18px; }
+.benefit-card p { margin: 0; font-size: 14px; color: var(--muted); }
+
+/* Sentiments Screen */
+.sentiments-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 16px;
+}
+.sentiment-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 8px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #fff, #fbfdff);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.sentiment-card:hover { transform: scale(1.03); }
+.sentiment-icon { font-size: 36px; margin-bottom: 4px; }
+.sentiment-text { font-weight: 600; font-size: 14px; }
+
+/* Profile & Account Settings */
+.avatar-option {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-stats {
+    background: rgba(74, 144, 226, 0.05);
+    border: 1px solid rgba(74, 144, 226, 0.1);
+}
+.menu-list {
+  display: grid;
+  gap: 1px;
+  background: rgba(0,0,0,0.05);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: var(--card);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.menu-item:hover { background: rgba(74, 144, 226, 0.05); }
+.menu-icon { font-size: 20px; width: 30px; text-align: center; }
+.menu-text { flex: 1; margin-left: 10px; font-weight: 500; }
+.menu-action { color: var(--muted); font-weight: 600; }
+
+/* Form Groups (Account Settings) */
+.form-group {
+    margin-bottom: 12px;
+}
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+.form-group input[type="text"],
+.form-group input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.1);
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
 }
 
-/* Load Avatar */
-function loadAvatar() {
-  document.getElementById('avatar-img').src = state.avatar;
+/* Toggle Switch (Adapted from a standard web style) */
+.toggle-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    cursor: pointer;
+    position: relative;
+}
+.toggle-group:last-child { border-bottom: none; }
+.toggle-group label {
+    font-weight: 500;
+    margin-bottom: 0;
+    flex: 1;
+}
+.toggle-group input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.toggle-slider {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: background-color 0.4s;
+}
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: transform 0.4s;
+    border-radius: 50%;
+}
+input:checked + .toggle-slider {
+    background-color: var(--primary);
+}
+input:checked + .toggle-slider:before {
+    transform: translateX(20px);
 }
 
-/* Select Avatar from Grid (opcional, para presets) */
-function selectAvatar(element, src) {
-  document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
-  element.classList.add('selected');
-  state.avatar = src;
-  localStorage.setItem('avatar', state.avatar);
-  document.getElementById('avatar-img').src = state.avatar;
+/* Completion Screen (Progress Circle) */
+.progress-circle {
+  width: 100px;
+  height: 100px;
+  border: 8px solid var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin: 0 auto;
 }
 
-/* Save Notes */
-function saveNotes() {
-  state.notes = document.getElementById('notes-textarea').value;
-  localStorage.setItem('notes', state.notes);
-  toast('Notas salvas!');
+/* Toast Notification */
+#toast-container {
+    pointer-events: none;
+}
+.toast {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: all;
+  text-align: center;
+}
+.toast.hide {
+  opacity: 0;
+  transform: translateY(10px);
 }
 
-/* Load Notes */
-function loadNotes() {
-  document.getElementById('notes-textarea').value = state.notes;
+/* FOOTER (Navigation Bar) */
+.footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1000;
+  background: var(--card);
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+  padding: 8px 0;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  width: 100%;
 }
 
-/* Add Bookmark */
-function addBookmark(moduleIndex, aulaIndex) {
-  const bookmark = { module: COURSE.modules[moduleIndex].title, aula: COURSE.modules[moduleIndex].aulas[aulaIndex].title, date: new Date().toLocaleDateString() };
-  if (!state.bookmarks.some(b => b.aula === bookmark.aula)) {
-    state.bookmarks.push(bookmark);
-    localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
-    toast('Adicionado aos marcadores!');
-    loadBookmarks();
-  } else {
-    toast('Já marcado!');
-  }
+.footer-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
-/* Load Bookmarks */
-function loadBookmarks() {
-  const list = document.getElementById('bookmarks-list');
-  list.innerHTML = '';
-  state.bookmarks.forEach((b, i) => {
-    const li = document.createElement('li');
-    li.innerHTML = `${b.module} - ${b.aula} (${b.date}) <button class="btn ghost" onclick="removeBookmark(${i})">Remover</button>`;
-    list.appendChild(li);
-  });
+.footer-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  flex: 1;
+  cursor: pointer;
+  color: var(--muted);
+  transition: background 0.2s, color 0.3s ease;
+  border-radius: 8px;
+  min-width: 60px;
 }
 
-/* Remove Bookmark */
-function removeBookmark(index) {
-  state.bookmarks.splice(index, 1);
-  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
-  loadBookmarks();
+.footer-btn:hover {
+  background: rgba(74, 144, 226, 0.1);
 }
 
-/* Load Tips */
-function loadTips() {
-  const tipsList = document.getElementById('tips-list');
-  if (state.tips) {
-    tipsList.innerHTML = state.tips;
-  }
+.footer-icon {
+  font-size: 20px;
+  margin-bottom: 2px;
+  line-height: 1;
 }
 
-/* Save Tips */
-function saveTips() {
-  state.tips = document.getElementById('tips-list').innerHTML;
-  localStorage.setItem('tips', state.tips);
-  toast('Dicas salvas!');
-}
-// Adicione esta função ao seu script.js para destacar o botão ativo
-function updateFooterActiveButton(screen) {
-  const buttons = document.querySelectorAll('.footer-btn');
-  buttons.forEach(btn => {
-    btn.classList.remove('active');
-    
-    // Mapeia as telas para os botões correspondentes
-    const screenMap = {
-      'home': 0,
-      'benefits': 1,
-      'sentiments': 2,
-      'profile': 3
-    };
-    
-    if (screenMap[screen] !== undefined) {
-      buttons[screenMap[screen]].classList.add('active');
-    }
-  });
+.footer-label {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--muted);
+  transition: color 0.3s ease;
 }
 
-// Modifique a função nav para incluir a atualização do footer
-function nav(screen) {
-  // hide all screens
-  ['signup', 'home', 'aulas', 'aula', 'benefits', 'sentiments', 'profile', 'avatar', 'notes', 'tips', 'bookmarks', 'bio', 'final'].forEach(s => {
-    const el = document.getElementById('screen-' + s);
-    if (el) el.style.display = 'none';
-  });
-  // show chosen
-  document.getElementById('screen-' + screen).style.display = 'block';
+.footer-btn.active {
+  background: rgba(74, 144, 226, 0.05);
+}
 
-  state.currentScreen = screen;
-  setTabActive(screen);
-  updateFooterActiveButton(screen); // Adicionado
-  closeMenu();
+.footer-btn.active .footer-label {
+  color: var(--primary);
+}
+
+/* Dark mode adjustments */
+.dark-mode .footer {
+  background: var(--dark-card);
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.3);
+}
+.dark-mode .footer-btn:hover {
+  background: rgba(74, 144, 226, 0.2);
+}
+.dark-mode .footer-btn.active {
+  background: rgba(74, 144, 226, 0.25);
+}
+.dark-mode .profile-stats {
+  background: rgba(74, 144, 226, 0.1);
+}
+.dark-mode .menu-item {
+  background: rgba(255, 255, 255, 0.05);
+}
+.dark-mode .menu-item:hover {
+  background: rgba(74, 144, 226, 0.15);
+}
+.dark-mode .form-group input {
+  background: var(--dark-card);
+  color: var(--dark-text);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.dark-mode .form-group input:focus {
+    border-color: var(--primary);
+}
+.dark-mode .toggle-group {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.dark-mode .signup-btn {
+    background: #252525;
+    border-color: rgba(255,255,255,0.1);
+    color: var(--dark-text);
 }
