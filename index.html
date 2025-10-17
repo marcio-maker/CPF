@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -6,10 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Conexão Pais e Filhos — Demo</title>
 
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Link para CSS -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -34,35 +31,34 @@
     </header>
 
     <div class="main-content">
-      <!-- SCREEN: Sign Up -->
-      <main id="screen-signup" class="screen card" style="display:block;text-align:center;">
-        <h2 style="margin-top:0">Sign Up</h2>
+      
+      <main id="screen-signup" class="screen card" style="display:none;text-align:center;">
+        <h2 style="margin-top:0">Bem-vindo(a)!</h2>
+        <p class="muted">Crie sua conta para acompanhar seu progresso no curso.</p>
         <div class="signup-form">
-          <button class="signup-btn"><img src="https://via.placeholder.com/20?text=G" alt="Google"> Sign up with Google</button>
-          <button class="signup-btn"><img src="https://via.placeholder.com/20?text=F" alt="Facebook"> Sign up with Facebook</button>
-          <div class="signup-or">or Sign up with email</div>
-          <input type="email" placeholder="exemplo@email.com" style="width:100%;padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.1);">
-          <button class="btn" onclick="nav('home')">Continue</button>
+          <button class="signup-btn"><img src="https://via.placeholder.com/20?text=G" alt="Google"> Cadastrar com Google</button>
+          <button class="signup-btn"><img src="https://via.placeholder.com/20?text=F" alt="Facebook"> Cadastrar com Facebook</button>
+          <div class="signup-or">ou Cadastre-se com email</div>
+          <input type="text" id="signup-name" placeholder="Seu Nome Completo" style="width:100%;padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.1);margin-bottom:8px;">
+          <input type="email" id="signup-email" placeholder="exemplo@email.com" style="width:100%;padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.1);margin-bottom:12px;">
+          <button class="btn" onclick="saveInitialAccount()">Começar o Curso</button>
         </div>
       </main>
 
-      <!-- SCREEN: Home / Módulos list -->
       <main id="screen-home" class="screen card" style="display:none">
         <div class="course-head">
           <div>
             <div class="muted">Módulos</div>
             <h2 style="margin:4px 0 0">Fortalecendo Laços Familiares</h2>
           </div>
-          <div class="meta">Versão demo • V1.0</div>
+          <div class="meta">Versão demo • 32 Aulas</div>
         </div>
-        <p class="muted">Um curso único para fortalecer laços familiares, ministrado pelo Dr. Wimer Bottura Jr., psiquiatra e especialista em relacionamentos saudáveis com adolescentes. São 4 módulos, cada um com 8 aulas de até 8 minutos. Complete no seu próprio ritmo!</p>
+        <p class="muted">Um curso único para fortalecer laços familiares, ministrado pelo Dr. Wimer Bottura Jr.</p>
 
         <div class="modules" id="modules">
-          <!-- JS will populate modules -->
-        </div>
+          </div>
       </main>
 
-      <!-- SCREEN: Aulas de um Módulo -->
       <section id="screen-aulas" class="screen card" style="display:none">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <div>
@@ -76,15 +72,13 @@
         </div>
 
         <div class="aulas" id="aulas-list">
-          <!-- JS will populate aulas -->
-        </div>
+          </div>
 
         <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
           <button class="btn ghost" onclick="nav('home')">Voltar aos Módulos</button>
         </div>
       </section>
 
-      <!-- SCREEN: Aula (player + quiz) -->
       <section id="screen-aula" class="screen card" style="display:none">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <div>
@@ -104,209 +98,133 @@
 
           <div class="player-controls">
             <button class="btn ghost" onclick="nav('aulas')">Voltar às Aulas</button>
+            <button class="btn ghost" id="bookmark-btn">🔖 Marcar Aula</button>
+            <button class="btn" id="mark-complete-btn">Marcar como Concluída</button>
           </div>
         </div>
 
-        <div id="quiz-area" class="card" style="margin-top:12px;padding:12px">
-          <!-- quiz will be injected here -->
+        <div id="quiz-area" class="card" style="margin-top:12px;padding:12px;display:none;">
         </div>
-
+        
         <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
           <button class="btn ghost" onclick="nav('aulas')">Sair</button>
-          <button class="btn" onclick="nextQuiz()">Próximo</button>
         </div>
       </section>
 
-      <!-- SCREEN: Benefits -->
-      <section id="screen-benefits" class="screen card" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div>
-            <div class="muted">Benefícios</div>
-            <h2 style="margin:4px 0 0">Benefícios do Curso</h2>
-          </div>
-          <div class="badge">Resultados</div>
-        </div>
+      <!-- Substitua a seção de Benefícios no seu index.html existente -->
+<section id="screen-benefits" class="screen card" style="display:none">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div>
+      <div class="muted">Recursos</div>
+      <h2 style="margin:4px 0 0;color:var(--text)">Benefícios e Ferramentas</h2>
+    </div>
+    <div class="badge">Ações</div>
+  </div>
 
-        <div class="benefits-grid">
-          <div class="benefit-card positive"><div class="benefit-icon">❤️</div>Relações Mais Próximas</div>
-          <div class="benefit-card positive"><div class="benefit-icon">🤝</div>Menos Conflitos</div>
-          <div class="benefit-card positive"><div class="benefit-icon">👨‍👩‍👧</div>Habilidades Parentais Melhoradas</div>
-          <div class="benefit-card positive"><div class="benefit-icon">⏰</div>Mais Tempo de Qualidade</div>
-          <div class="benefit-card negative"><div class="benefit-icon">😠</div>Traços de Caráter Negativos</div>
-          <div class="benefit-card negative"><div class="benefit-icon">😭</div>Birras e Reclamações</div>
-        </div>
-      </section>
-
-      <!-- SCREEN: Sentiments / Lista de Emoções -->
+  <div class="benefits-grid">
+    <div class="benefit-card positive">
+      <div class="benefit-icon">🧠</div>
+      <h3 style="color:var(--text)">Foco na Mentalidade</h3>
+      <p style="color:var(--text)">Mude o seu <em>mindset</em> de reativo para proativo nos desafios familiares.</p>
+    </div>
+    <div class="benefit-card neutral">
+      <div class="benefit-icon">🗣️</div>
+      <h3 style="color:var(--text)">Comunicação Efetiva</h3>
+      <p style="color:var(--text)">Aprenda a ouvir e a se expressar de forma clara e empática.</p>
+    </div>
+    <div class="benefit-card primary">
+      <div class="benefit-icon">🔗</div>
+      <h3 style="color:var(--text)">Fortalecimento de Vínculos</h3>
+      <p style="color:var(--text)">Construa uma conexão de confiança e respeito com seus filhos.</p>
+    </div>
+    <div class="benefit-card danger">
+      <div class="benefit-icon">🔥</div>
+      <h3 style="color:var(--text)">Gestão de Conflitos</h3>
+      <p style="color:var(--text)">Transforme brigas em oportunidades de crescimento e aprendizado.</p>
+    </div>
+  </div>
+</section>
+      
       <section id="screen-sentiments" class="screen card" style="display:none">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
           <div>
-            <div class="muted">Lista de Emoções</div>
-            <h2 style="margin:4px 0 0">Por Que Nomear Emoções?</h2>
+            <div class="muted">Ferramenta</div>
+            <h2 style="margin:4px 0 0">Roda das Emoções</h2>
           </div>
-          <div class="badge">Educação Emocional</div>
+          <div class="badge">Beta</div>
         </div>
 
-        <div style="margin-bottom:10px">
-          <div class="muted">Instruções</div>
-          <p style="margin:6px 0">Nomear emoções ajuda a processar melhor. Escolha uma:</p>
-        </div>
-
+        <p class="muted">Use a Roda das Emoções para identificar e nomear o que você e seu filho estão sentindo. É o primeiro passo para o manejo emocional.</p>
+        
         <div class="sentiments-grid">
-          <div class="sentiment-card">
-            <strong>Emoções Positivas</strong>
-            <ul style="margin:8px 0 0;padding-left:18px;color:var(--muted)">
-              <li>Permite ao cérebro lógico ajudar no processamento</li>
-              <li>Ajuda a responder melhor às emoções</li>
-              <li>Ajuda a entender o que estamos sentindo</li>
-              <li>Todas as acima</li>
-            </ul>
+          <div class="sentiment-card positive" onclick="toast('Você está no controle. 😉')">
+            <div class="sentiment-icon">😊</div>
+            <div class="sentiment-text">Alegria</div>
+          </div>
+          <div class="sentiment-card danger" onclick="toast('Respire fundo. Não reaja. 🧘')">
+            <div class="sentiment-icon">😡</div>
+            <div class="sentiment-text">Raiva</div>
+          </div>
+          <div class="sentiment-card neutral" onclick="toast('É normal. Procure o que está por baixo. 🔎')">
+            <div class="sentiment-icon">😟</div>
+            <div class="sentiment-text">Ansiedade</div>
+          </div>
+          <div class="sentiment-card warning" onclick="toast('Abrace e valide o sentimento. 🤗')">
+            <div class="sentiment-icon">😢</div>
+            <div class="sentiment-text">Tristeza</div>
           </div>
         </div>
+        <p class="muted" style="margin-top:16px">Em uma próxima versão, teremos um diário integrado.</p>
       </section>
 
-      <!-- SCREEN: Profile (ATUALIZADO) -->
       <section id="screen-profile" class="screen card" style="display:none">
-        <div class="profile-header">
-          <div class="profile-avatar" id="profile-avatar">
-            <img src="https://via.placeholder.com/48" alt="Avatar" id="avatar-img">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div>
+            <div class="muted">Conta</div>
+            <h2 style="margin:4px 0 0">Seu Perfil</h2>
           </div>
-          <input type="file" id="avatar-upload" accept="image/*" style="display:none" onchange="updateAvatar(this)">
-          <button class="btn ghost" onclick="document.getElementById('avatar-upload').click()">Alterar Avatar</button>
+          <div class="badge" onclick="nav('account')">Editar</div>
         </div>
         
-        <div class="profile-info">
-          <div class="profile-name-container">
-            <h2 id="profile-name-display">Seu Nome</h2>
-            <button class="btn-edit" onclick="toggleNameEdit()">✏️</button>
+        <div id="profile-content">
           </div>
-          <div class="name-edit-container" id="name-edit-container" style="display:none">
-            <input type="text" id="profile-name-input" placeholder="Digite seu nome" maxlength="30">
-            <button class="btn small" onclick="saveProfileName()">Salvar</button>
-            <button class="btn ghost small" onclick="cancelNameEdit()">Cancelar</button>
-          </div>
-          <div class="muted">Progresso: <span id="progress-count">0</span> de 32 aulas</div>
-          <div class="muted">Membro desde: <span id="member-since">2024</span></div>
-        </div>
-
-        <div class="profile-stats">
-          <div class="stat-card">
-            <div class="stat-number" id="completed-modules">0</div>
-            <div class="stat-label">Módulos</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" id="completed-aulas">0</div>
-            <div class="stat-label">Aulas</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number" id="quiz-score">0%</div>
-            <div class="stat-label">Pontuação</div>
-          </div>
-        </div>
-
-        <div class="profile-menu">
-          <div class="menu-item" onclick="toggleDarkMode()">
-            <span id="mode-icon">🌙</span> 
-            <span id="mode-text">Modo Dark</span>
-          </div>
-          <div class="menu-item" onclick="nav('notes')">
-            <span>📝</span> Notas
-          </div>
-          <div class="menu-item" onclick="nav('tips')">
-            <span>💡</span> Dicas
-          </div>
-          <div class="menu-item" onclick="nav('bookmarks')">
-            <span>🔖</span> Marcadores
-          </div>
-          <div class="menu-item" onclick="nav('bio')">
-            <span>👨‍⚕️</span> Sobre o Dr. Wimer Bottura Jr.
-          </div>
-          <div class="menu-item" onclick="showAccountSettings()">
-            <span>⚙️</span> Configurações da Conta
-          </div>
-        </div>
       </section>
 
-      <!-- SCREEN: Account Settings (NOVA) -->
       <section id="screen-account" class="screen card" style="display:none">
-        <h2>Configurações da Conta</h2>
+        <h2 style="margin-top:0">Configurações da Conta</h2>
         
-        <div class="account-section">
-          <h3>Informações Pessoais</h3>
-          <div class="form-group">
-            <label>Nome completo</label>
-            <input type="text" id="account-name" placeholder="Seu nome completo">
-          </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="account-email" placeholder="seu@email.com">
-          </div>
+        <div class="form-group">
+          <label for="account-name">Nome</label>
+          <input type="text" id="account-name" placeholder="Seu nome">
+        </div>
+        <div class="form-group">
+          <label for="account-email">Email</label>
+          <input type="email" id="account-email" placeholder="Seu email">
         </div>
 
-        <div class="account-section">
-          <h3>Preferências</h3>
-          <div class="preference-item">
-            <label>Notificações por email</label>
-            <label class="switch">
-              <input type="checkbox" id="notifications-toggle" checked>
-              <span class="slider"></span>
-            </label>
-          </div>
-          <div class="preference-item">
-            <label>Lembretes diários</label>
-            <label class="switch">
-              <input type="checkbox" id="reminders-toggle">
-              <span class="slider"></span>
-            </label>
-          </div>
+        <h3 style="margin-top:20px;margin-bottom:10px">Preferências</h3>
+        
+        <div class="form-group toggle-group">
+          <label for="notifications-toggle">Notificações por Email</label>
+          <input type="checkbox" id="notifications-toggle" onchange="handleNotificationToggle(this)">
+          <span class="toggle-slider"></span>
+        </div>
+        
+        <div class="form-group toggle-group">
+          <label for="reminders-toggle">Lembretes Diários</label>
+          <input type="checkbox" id="reminders-toggle" onchange="handleReminderToggle(this)">
+          <span class="toggle-slider"></span>
         </div>
 
-        <div class="account-actions">
-          <button class="btn" onclick="saveAccountSettings()">Salvar Alterações</button>
+        <div style="margin-top:20px;display:flex;gap:8px;justify-content:flex-end">
           <button class="btn ghost" onclick="nav('profile')">Cancelar</button>
+          <button class="btn" onclick="saveAccountSettings()">Salvar Configurações</button>
         </div>
       </section>
 
-      <!-- SCREEN: Notes -->
-      <section id="screen-notes" class="screen card" style="display:none">
-        <h2>Notas</h2>
-        <textarea id="notes-textarea" placeholder="Escreva suas notas aqui..." style="width:100%;height:200px;padding:8px;border-radius:8px;border:1px solid var(--muted);"></textarea>
-        <button class="btn" onclick="saveNotes()">Salvar Notas</button>
-        <button class="btn ghost" onclick="nav('profile')">Voltar</button>
-      </section>
-
-      <!-- SCREEN: Tips -->
-      <section id="screen-tips" class="screen card" style="display:none">
-        <h2>Dicas</h2>
-        <ul>
-          <li>Dica 1: Nomeie emoções para melhor regulação.</li>
-          <li>Dica 2: Dedique tempo diário para conexões familiares.</li>
-          <li>Dica 3: Pratique escuta ativa com seus filhos.</li>
-          <!-- Adicione mais dicas conforme necessário -->
-        </ul>
-        <button class="btn ghost" onclick="nav('profile')">Voltar</button>
-      </section>
-
-      <!-- SCREEN: Bookmarks -->
-      <section id="screen-bookmarks" class="screen card" style="display:none">
-        <h2>Marcadores</h2>
-        <ul id="bookmarks-list">
-          <!-- JS will populate bookmarks -->
-        </ul>
-        <button class="btn ghost" onclick="nav('profile')">Voltar</button>
-      </section>
-
-      <!-- SCREEN: Bio -->
-      <section id="screen-bio" class="screen card" style="display:none">
-        <h2>Sobre o Dr. Wimer Bottura Jr.</h2>
-        <p>Dr. Wimer Bottura Jr. é um psiquiatra e psicoterapeuta especializado em famílias, infância e adolescência. Com anos de experiência, ele foca em promover relacionamentos saudáveis entre pais e filhos, ajudando a superar desafios emocionais e comportamentais. Seu abordagem é baseada em evidências científicas e empatia, tornando seus cursos acessíveis e transformadores.</p>
-        <button class="btn ghost" onclick="nav('profile')">Voltar</button>
-      </section>
-
-      <!-- SCREEN: Final (conclusão de aula ou módulo) -->
-      <section id="screen-final" class="screen card" style="display:none">
-        <div class="final">
-          <h2>Parabéns — Aula Concluída 🎉</h2>
+      <section id="screen-complete" class="screen card" style="display:none;text-align:center">
+        <div class="complete-message">
+          <h2 style="margin-top:0">Parabéns — Aula Concluída 🎉</h2>
           <div id="final-msg" class="muted">Você completou a aula</div>
           <div id="progress-wrap" style="margin-top:12px">
             <div class="progress-circle" id="progress-circle"><div id="progress-num" style="font-weight:800">0%</div></div>
@@ -319,10 +237,11 @@
       </section>
     </div>
 
-    <!-- FOOTER MELHORADO -->
+    <div id="toast-container" style="position: fixed; bottom: 80px; left: 16px; right: 16px; z-index: 2000; pointer-events: none;"></div>
+
     <footer class="footer">
       <div class="footer-nav">
-        <button class="footer-btn" onclick="nav('home')">
+        <button class="footer-btn active" onclick="nav('home')">
           <div class="footer-icon">🏠</div>
           <span class="footer-label">Início</span>
         </button>
@@ -342,7 +261,6 @@
     </footer>
   </div>
 
-  <!-- Script JS -->
   <script src="script.js"></script>
 </body>
 </html>
