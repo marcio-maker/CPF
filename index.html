@@ -160,31 +160,110 @@
               <li>Ajuda a responder melhor às emoções</li>
               <li>Ajuda a entender o que estamos sentindo</li>
               <li>Todas as acima</li>
-              <li>Ajuda a regular respostas emocionais</li>
-              <li>Facilita a empatia com os filhos</li>
-              <li>Melhora a comunicação familiar</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <!-- SCREEN: Profile -->
+      <!-- SCREEN: Profile (ATUALIZADO) -->
       <section id="screen-profile" class="screen card" style="display:none">
         <div class="profile-header">
-          <div class="profile-avatar" id="profile-avatar"><img src="https://via.placeholder.com/48" alt="Avatar" id="avatar-img"></div>
+          <div class="profile-avatar" id="profile-avatar">
+            <img src="https://via.placeholder.com/48" alt="Avatar" id="avatar-img">
+          </div>
           <input type="file" id="avatar-upload" accept="image/*" style="display:none" onchange="updateAvatar(this)">
           <button class="btn ghost" onclick="document.getElementById('avatar-upload').click()">Alterar Avatar</button>
         </div>
-        <div>
-          <div class="profile-name">Seu Nome</div>
-          <div class="muted">Progresso: 0 de 32 aulas</div>
+        
+        <div class="profile-info">
+          <div class="profile-name-container">
+            <h2 id="profile-name-display">Seu Nome</h2>
+            <button class="btn-edit" onclick="toggleNameEdit()">✏️</button>
+          </div>
+          <div class="name-edit-container" id="name-edit-container" style="display:none">
+            <input type="text" id="profile-name-input" placeholder="Digite seu nome" maxlength="30">
+            <button class="btn small" onclick="saveProfileName()">Salvar</button>
+            <button class="btn ghost small" onclick="cancelNameEdit()">Cancelar</button>
+          </div>
+          <div class="muted">Progresso: <span id="progress-count">0</span> de 32 aulas</div>
+          <div class="muted">Membro desde: <span id="member-since">2024</span></div>
         </div>
+
+        <div class="profile-stats">
+          <div class="stat-card">
+            <div class="stat-number" id="completed-modules">0</div>
+            <div class="stat-label">Módulos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="completed-aulas">0</div>
+            <div class="stat-label">Aulas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="quiz-score">0%</div>
+            <div class="stat-label">Pontuação</div>
+          </div>
+        </div>
+
         <div class="profile-menu">
-          <div class="menu-item" onclick="toggleDarkMode()"><span id="mode-icon">🌙</span> <span id="mode-text">Modo Dark</span></div>
-          <div class="menu-item" onclick="nav('notes')"><span>📝</span> Notas</div>
-          <div class="menu-item" onclick="nav('tips')"><span>💡</span> Dicas</div>
-          <div class="menu-item" onclick="nav('bookmarks')"><span>🔖</span> Marcadores</div>
-          <div class="menu-item" onclick="nav('bio')"><span>👨‍⚕️</span> Sobre o Dr. Wimer Bottura Jr.</div>
+          <div class="menu-item" onclick="toggleDarkMode()">
+            <span id="mode-icon">🌙</span> 
+            <span id="mode-text">Modo Dark</span>
+          </div>
+          <div class="menu-item" onclick="nav('notes')">
+            <span>📝</span> Notas
+          </div>
+          <div class="menu-item" onclick="nav('tips')">
+            <span>💡</span> Dicas
+          </div>
+          <div class="menu-item" onclick="nav('bookmarks')">
+            <span>🔖</span> Marcadores
+          </div>
+          <div class="menu-item" onclick="nav('bio')">
+            <span>👨‍⚕️</span> Sobre o Dr. Wimer Bottura Jr.
+          </div>
+          <div class="menu-item" onclick="showAccountSettings()">
+            <span>⚙️</span> Configurações da Conta
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN: Account Settings (NOVA) -->
+      <section id="screen-account" class="screen card" style="display:none">
+        <h2>Configurações da Conta</h2>
+        
+        <div class="account-section">
+          <h3>Informações Pessoais</h3>
+          <div class="form-group">
+            <label>Nome completo</label>
+            <input type="text" id="account-name" placeholder="Seu nome completo">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="account-email" placeholder="seu@email.com">
+          </div>
+        </div>
+
+        <div class="account-section">
+          <h3>Preferências</h3>
+          <div class="preference-item">
+            <label>Notificações por email</label>
+            <label class="switch">
+              <input type="checkbox" id="notifications-toggle" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="preference-item">
+            <label>Lembretes diários</label>
+            <label class="switch">
+              <input type="checkbox" id="reminders-toggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="account-actions">
+          <button class="btn" onclick="saveAccountSettings()">Salvar Alterações</button>
+          <button class="btn ghost" onclick="nav('profile')">Cancelar</button>
         </div>
       </section>
 
@@ -192,25 +271,20 @@
       <section id="screen-notes" class="screen card" style="display:none">
         <h2>Notas</h2>
         <textarea id="notes-textarea" placeholder="Escreva suas notas aqui..." style="width:100%;height:200px;padding:8px;border-radius:8px;border:1px solid var(--muted);"></textarea>
-        <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end">
-          <button class="btn ghost" onclick="nav('profile')">Voltar</button>
-          <button class="btn" onclick="saveNotes()">Salvar Notas</button>
-        </div>
+        <button class="btn" onclick="saveNotes()">Salvar Notas</button>
+        <button class="btn ghost" onclick="nav('profile')">Voltar</button>
       </section>
 
       <!-- SCREEN: Tips -->
       <section id="screen-tips" class="screen card" style="display:none">
         <h2>Dicas</h2>
-        <ul id="tips-list">
+        <ul>
           <li>Dica 1: Nomeie emoções para melhor regulação.</li>
           <li>Dica 2: Dedique tempo diário para conexões familiares.</li>
           <li>Dica 3: Pratique escuta ativa com seus filhos.</li>
           <!-- Adicione mais dicas conforme necessário -->
         </ul>
-        <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end">
-          <button class="btn ghost" onclick="nav('profile')">Voltar</button>
-          <button class="btn" onclick="saveTips()">Salvar</button>
-        </div>
+        <button class="btn ghost" onclick="nav('profile')">Voltar</button>
       </section>
 
       <!-- SCREEN: Bookmarks -->
@@ -229,19 +303,6 @@
         <button class="btn ghost" onclick="nav('profile')">Voltar</button>
       </section>
 
-      <!-- SCREEN: Avatar Selection -->
-      <section id="screen-avatar" class="screen card" style="display:none">
-        <h2>Meu Avatar</h2>
-        <div class="avatar-grid">
-          <div class="avatar-option selected" style="background:ur[](https://via.placeholder.com/100?text=A1) center/cover;" onclick="selectAvatar(this, 'https://via.placeholder.com/48?text=A1')"></div>
-          <div class="avatar-option" style="background:ur[](https://via.placeholder.com/100?text=A2) center/cover;" onclick="selectAvatar(this, 'https://via.placeholder.com/48?text=A2')"></div>
-          <div class="avatar-option" style="background:ur[](https://via.placeholder.com/100?text=A3) center/cover;" onclick="selectAvatar(this, 'https://via.placeholder.com/48?text=A3')"></div>
-          <div class="avatar-option" style="background:ur[](https://via.placeholder.com/100?text=A4) center/cover;" onclick="selectAvatar(this, 'https://via.placeholder.com/48?text=A4')"></div>
-          <div class="avatar-option" style="background:ur[](https://via.placeholder.com/100?text=A5) center/cover;" onclick="selectAvatar(this, 'https://via.placeholder.com/48?text=A5')"></div>
-        </div>
-        <button class="btn" style="margin-top:16px;width:100%;" onclick="nav('profile')">Salvar</button>
-      </section>
-
       <!-- SCREEN: Final (conclusão de aula ou módulo) -->
       <section id="screen-final" class="screen card" style="display:none">
         <div class="final">
@@ -257,6 +318,28 @@
         </div>
       </section>
     </div>
+
+    <!-- FOOTER MELHORADO -->
+    <footer class="footer">
+      <div class="footer-nav">
+        <button class="footer-btn" onclick="nav('home')">
+          <div class="footer-icon">🏠</div>
+          <span class="footer-label">Início</span>
+        </button>
+        <button class="footer-btn" onclick="nav('benefits')">
+          <div class="footer-icon">⭐</div>
+          <span class="footer-label">Benefícios</span>
+        </button>
+        <button class="footer-btn" onclick="nav('sentiments')">
+          <div class="footer-icon">😊</div>
+          <span class="footer-label">Emoções</span>
+        </button>
+        <button class="footer-btn" onclick="nav('profile')">
+          <div class="footer-icon">👤</div>
+          <span class="footer-label">Perfil</span>
+        </button>
+      </div>
+    </footer>
   </div>
 
   <!-- Script JS -->
